@@ -167,11 +167,11 @@ class PluginHandler {
 				$order['payment_method'] = '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_view-a-trans&id=' . $order['paypal_transaction_id'] . '" target="_blank">PayPal</a>';
 			}
 
-			$downloads = maybe_unserialize( $purchase['downloads'] );
+			$downloads = edd_get_payment_meta_downloads( $result->post_id );
 
 			if ( $downloads ) {
 				$license_keys = '';
-				foreach ( maybe_unserialize( $purchase['downloads'] ) as $download ) {
+				foreach ( $downloads as $download ) {
 
 					$id = isset( $purchase['cart_details'] ) ? $download['id'] : $download;
 
