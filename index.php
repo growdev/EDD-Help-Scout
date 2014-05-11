@@ -102,14 +102,14 @@ class PluginHandler {
 		/* Ignore hello@headwaythemes.com */
 		if ( isset( $data['customer']['emails'] ) && is_array( $data['customer']['emails'] ) ) {
 
-			if(($key = array_search('hello@headwaythemes.com', $messages)) !== false) {
+			if(($key = array_search(HELPCOUT_EMAIL, $messages)) !== false) {
 			    unset($data['customer']['emails'][$key]);
 			}
 
 		} else {
 
-			if ( $data['customer']['email'] == 'hello@headwaythemes.com' ) {
-				return 'Cannot query customer licenses.  E-mail from hello@headwaythemes.com';
+			if ( $data['customer']['email'] == HELPCOUT_EMAIL ) {
+				return 'Cannot query customer licenses.  E-mail from ' . HELPCOUT_EMAIL;
 			}
 
 		}
