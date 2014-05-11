@@ -164,7 +164,16 @@ class PluginHandler {
 						$order['paypal_transaction_id'] = $match[1];
 				}
 
-				$order['payment_method'] = '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_view-a-trans&id=' . $order['paypal_transaction_id'] . '" target="_blank">PayPal</a>';
+				$order['payment_method'] = '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_view-a-trans&id=' . esc_url( $order['paypal_transaction_id'] ) . '" target="_blank">PayPal</a>';
+			} else if ( 'stripe' == $order['payment_method'] ) {
+				// Grab the PayPal transaction ID and link the transaction to PayPal
+				$notes = edd_get_payment_notes( $result->post_id );
+				foreach ( $notes as $note ) {
+					if ( preg_match( '/^Stripe Charge ID: ([^\s]+)/', $note->comment_content, $match ) )
+						$order['stripe_charge_id'] = $match[1];
+				}
+
+				$order['payment_method'] = '<a href="https:/stripe.com/payments/' . esc_url( $order['stripe_charge_id'] ) . '" target="_blank">Stripe</a>';
 			}
 
 			$downloads = edd_get_payment_meta_downloads( $result->post_id );
@@ -194,9 +203,11 @@ class PluginHandler {
 				}
 			}
 
-			if ( isset( $license_keys ) )
+			if ( isset( $license_keys ) ) {
 				$order['downloads'][] = $license_keys;
-			$orders[]             = $order;
+			}
+
+			$orders[] = $order;
 		}
 
 		$output = '';
