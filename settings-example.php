@@ -1,0 +1,2 @@
+<?php
+define( 'HELPSCOUT_SECRET_KEY', 'YOUR SECRET KEY HERE' );
