@@ -125,11 +125,11 @@ class PluginHandler {
 			$email_query = "= '" . $data['customer']['email'] . "'";
 		}
 
-		$query   = "SELECT pm2.post_id, pm2.meta_value, p.post_status FROM $wpdb->postmeta pm, $wpdb->postmeta pm2, $wpdb->posts p WHERE pm.meta_key = '_edd_payment_user_email' AND pm.meta_value $email_query AND pm.post_id = pm2.post_id AND pm2.meta_key = '_edd_payment_meta' AND pm.post_id = p.ID AND p.post_status NOT IN ('failed','revoked') ORDER BY pm.post_id DESC";
+		$query   = "SELECT pm2.post_id, pm2.meta_value, p.post_status FROM $wpdb->postmeta pm, $wpdb->postmeta pm2, $wpdb->posts p WHERE pm.meta_key = '_edd_payment_user_email' AND pm.meta_value $email_query AND pm.post_id = pm2.post_id AND pm2.meta_key = '_edd_payment_meta' AND pm.post_id = p.ID AND p.post_status NOT IN ('failed','pending') ORDER BY pm.post_id DESC LIMIT 20";
 		$results = $wpdb->get_results( $query );
 
 		if ( !$results ) {
-			$query   = "SELECT pm.post_id, pm.meta_value, p.post_status FROM $wpdb->postmeta pm, $wpdb->posts p WHERE pm.meta_key = '_edd_payment_meta' AND pm.meta_value LIKE '%%" . $data['customer']['fname'] . "%%' AND pm.meta_value LIKE '%%" . $data['customer']['lname'] . "%%' AND pm.post_id = p.ID AND p.post_status NOT IN ('failed','revoked') ORDER BY pm.post_id DESC";
+			$query   = "SELECT pm.post_id, pm.meta_value, p.post_status FROM $wpdb->postmeta pm, $wpdb->posts p WHERE pm.meta_key = '_edd_payment_meta' AND pm.meta_value LIKE '%%" . $data['customer']['fname'] . "%%' AND pm.meta_value LIKE '%%" . $data['customer']['lname'] . "%%' AND pm.post_id = p.ID AND p.post_status NOT IN ('failed','pending') ORDER BY pm.post_id DESC LIMIT 20";
 			$results = $wpdb->get_results( $query );
 		}
 
