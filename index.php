@@ -147,9 +147,7 @@ class EDD_Help_Scout {
 
 			$purchase = maybe_unserialize( $result->meta_value );
 
-			date_default_timezone_set('America/Chicago');
-
-			$order['date'] = date('F j, Y, g:i a T', strtotime($post->post_date));
+			$order['date'] = date_i18n( get_option( 'date_format' ) . ', ' . get_option( 'time_format' ), strtotime( $post->post_date ) );
 			unset( $post );
 
 			$order['id']             = $result->post_id;
