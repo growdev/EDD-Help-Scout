@@ -13,7 +13,7 @@ require '../wp-load.php';
 // Require the settings file for the secret key
 require './settings.php';
 
-class PluginHandler {
+class EDD_Help_Scout {
 	private $input = false;
 
 	/**
@@ -228,6 +228,6 @@ class PluginHandler {
 	}
 }
 
-$plugin = new PluginHandler();
+$eddhelpscout = new EDD_Help_Scout();
 
-echo json_encode( $plugin->getResponse() );
+echo json_encode( $eddhelpscout->getResponse() );
