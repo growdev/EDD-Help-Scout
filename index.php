@@ -13,7 +13,7 @@ require '../wp-load.php';
 // Require the settings file for the secret key
 require './settings.php';
 
-class PluginHandler {
+class EDD_Help_Scout {
 	private $input = false;
 
 	/**
@@ -129,6 +129,7 @@ class PluginHandler {
 		$results = $wpdb->get_results( $query );
 
 		if ( !$results ) {
+			$fuzzy_results = true;
 			$query   = "SELECT pm.post_id, pm.meta_value, p.post_status FROM $wpdb->postmeta pm, $wpdb->posts p WHERE pm.meta_key = '_edd_payment_meta' AND pm.meta_value LIKE '%%" . $data['customer']['fname'] . "%%' AND pm.meta_value LIKE '%%" . $data['customer']['lname'] . "%%' AND pm.post_id = p.ID AND p.post_status NOT IN ('failed','pending') ORDER BY pm.post_id DESC LIMIT 20";
 			$results = $wpdb->get_results( $query );
 		}
@@ -211,11 +212,17 @@ class PluginHandler {
 		}
 
 		$output = '';
+		if ($fuzzy_results === true) {
+			$output .= '<p>Matches based on customer name:</p>';
+		}
 		foreach ( $orders as $order ) {
 			$output .= '<strong><i class="icon-cart"></i> ' . $order['link'] . '</strong>';
 			if ( $order['status'] != 'publish' )
 				$output .= ' - <span style="color:orange;font-weight:bold;">' . $order['status'] . '</span>';
 			$output .= '<p><span class="muted">' . $order['date'] . '</span><br/>';
+			if ($fuzzy_results === true) {
+				$output .= $order['name'] . '<br/>' . $order['email'] . '<p>';
+			}
 			$output .= '$' . $order['amount'] . ' - ' . $order['payment_method'] . '</p>';
 			$output .= '<ul>';
 			foreach ( $order['downloads'] as $download ) {
@@ -228,6 +235,6 @@ class PluginHandler {
 	}
 }
 
-$plugin = new PluginHandler();
+$eddhelpscout = new EDD_Help_Scout();
 
-echo json_encode( $plugin->getResponse() );
+echo json_encode( $eddhelpscout->getResponse() );
