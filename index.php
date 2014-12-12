@@ -224,6 +224,7 @@ class EDD_Help_Scout {
 				$output .= $order['name'] . '<br/>' . $order['email'] . '<p>';
 			}
 			$output .= '$' . $order['amount'] . ' - ' . $order['payment_method'] . '</p>';
+			$output .= '<p><i class="icon-pointer"></i><a target="_blank" href="' . add_query_arg( array( 'edd-action' => 'email_links', 'purchase_id' => $order['id'] ), admin_url( 'edit.php?post_type=download&page=edd-payment-history' ) ) . '">' . __( 'Resend Purchase Receipt', 'edd' ) . '</a></p>';
 			$output .= '<ul>';
 			foreach ( $order['downloads'] as $download ) {
 				$output .= '<li>' . $download . '</li>';
