@@ -99,7 +99,7 @@ class EDD_Help_Scout {
 	private function fetchHtml( $data ) {
 		global $wpdb;
 
-		/* Ignore hello@headwaythemes.com */
+		/* Ignore own email address */
 		if ( isset( $data['customer']['emails'] ) && is_array( $data['customer']['emails'] ) ) {
 
 			if(($key = array_search(HELPSCOUT_EMAIL, $messages)) !== false) {
