@@ -99,7 +99,7 @@ class EDD_Help_Scout {
 	private function fetchHtml( $data ) {
 		global $wpdb;
 
-		/* Ignore hello@headwaythemes.com */
+		/* Ignore own email address */
 		if ( isset( $data['customer']['emails'] ) && is_array( $data['customer']['emails'] ) ) {
 
 			if(($key = array_search(HELPSCOUT_EMAIL, $messages)) !== false) {
@@ -147,9 +147,7 @@ class EDD_Help_Scout {
 
 			$purchase = maybe_unserialize( $result->meta_value );
 
-			date_default_timezone_set('America/Chicago');
-
-			$order['date'] = date('F j, Y, g:i a T', strtotime($post->post_date));
+			$order['date'] = date_i18n( get_option( 'date_format' ) . ', ' . get_option( 'time_format' ), strtotime( $post->post_date ) );
 			unset( $post );
 
 			$order['id']             = $result->post_id;
@@ -224,6 +222,7 @@ class EDD_Help_Scout {
 				$output .= $order['name'] . '<br/>' . $order['email'] . '<p>';
 			}
 			$output .= '$' . $order['amount'] . ' - ' . $order['payment_method'] . '</p>';
+			$output .= '<p><i class="icon-pointer"></i><a target="_blank" href="' . add_query_arg( array( 'edd-action' => 'email_links', 'purchase_id' => $order['id'] ), admin_url( 'edit.php?post_type=download&page=edd-payment-history' ) ) . '">' . __( 'Resend Purchase Receipt', 'edd' ) . '</a></p>';
 			$output .= '<ul>';
 			foreach ( $order['downloads'] as $download ) {
 				$output .= '<li>' . $download . '</li>';
