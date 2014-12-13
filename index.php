@@ -154,6 +154,8 @@ class EDD_Help_Scout {
 			$order['status']         = $result->post_status;
 			$order['amount']         = edd_get_payment_amount( $result->post_id );
 			$order['payment_method'] = edd_get_payment_gateway( $result->post_id );
+			$order['email']          = $purchase['user_info']['email'];
+			$order['name']           = $purchase['user_info']['first_name'] . ' ' . $purchase['user_info']['last_name'];
 
 			if ( 'paypal' == $order['payment_method'] ) {
 				// Grab the PayPal transaction ID and link the transaction to PayPal
