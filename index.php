@@ -146,6 +146,7 @@ class EDD_Help_Scout {
 			$post = get_post( $result->post_id );
 
 			$purchase = maybe_unserialize( $result->meta_value );
+			$user_info = maybe_unserialize( $purchase['user_info'] );
 
 			$order['date'] = date_i18n( get_option( 'date_format' ) . ', ' . get_option( 'time_format' ), strtotime( $post->post_date ) );
 			unset( $post );
@@ -154,8 +155,8 @@ class EDD_Help_Scout {
 			$order['status']         = $result->post_status;
 			$order['amount']         = edd_get_payment_amount( $result->post_id );
 			$order['payment_method'] = edd_get_payment_gateway( $result->post_id );
-			$order['email']          = $purchase['user_info']['email'];
-			$order['name']           = $purchase['user_info']['first_name'] . ' ' . $purchase['user_info']['last_name'];
+			$order['email']          = $user_info['email'];
+			$order['name']           = $user_info['first_name'] . ' ' . $user_info['last_name'];
 
 			if ( 'paypal' == $order['payment_method'] ) {
 				// Grab the PayPal transaction ID and link the transaction to PayPal
