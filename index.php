@@ -192,7 +192,7 @@ class EDD_Help_Scout {
 						$license = $licensing->get_license_by_purchase( $order['id'], $id );
 						$order['downloads'][] = '<strong>' . get_the_title( $id ) . "</strong><br/>"
 							. edd_get_price_option_name( $id, $download['options']['price_id'] ) . '<br/>'
-							. get_post_meta( $license->ID, '_edd_sl_key', true ) . '<br/><br/>';
+							. get_post_meta( $license->ID, '_edd_sl_key', true ) . '<br/>';
 
 					} else {
 
