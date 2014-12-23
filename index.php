@@ -181,7 +181,6 @@ class EDD_Help_Scout {
 			$downloads = edd_get_payment_meta_downloads( $result->post_id );
 
 			if ( $downloads ) {
-				$license_keys = '';
 				foreach ( $downloads as $download ) {
 
 					$id = isset( $purchase['cart_details'] ) ? $download['id'] : $download;
@@ -191,22 +190,16 @@ class EDD_Help_Scout {
 					if ( get_post_meta( $id, '_edd_sl_enabled', true ) ) {
 
 						$license = $licensing->get_license_by_purchase( $order['id'], $id );
-						$license_keys .= '<strong>' . get_the_title( $id ) . "</strong><br/>"
+						$order['downloads'][] = '<strong>' . get_the_title( $id ) . "</strong><br/>"
 							. edd_get_price_option_name( $id, $download['options']['price_id'] ) . '<br/>'
 							. get_post_meta( $license->ID, '_edd_sl_key', true ) . '<br/><br/>';
 
 					} else {
 
-						$license_keys .= '<strong>' . get_the_title( $id ) . "</strong><br/>";
+						$order['downloads'][] = '<strong>' . get_the_title( $id ) . "</strong><br/>";
 
 					}
-
-
 				}
-			}
-
-			if ( isset( $license_keys ) ) {
-				$order['downloads'][] = $license_keys;
 			}
 
 			$orders[] = $order;
