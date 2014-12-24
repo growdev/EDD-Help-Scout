@@ -146,6 +146,7 @@ class EDD_Help_Scout {
 			$post = get_post( $result->post_id );
 
 			$purchase = maybe_unserialize( $result->meta_value );
+			$user_info = maybe_unserialize( $purchase['user_info'] );
 
 			$order['date'] = date_i18n( get_option( 'date_format' ) . ', ' . get_option( 'time_format' ), strtotime( $post->post_date ) );
 			unset( $post );
@@ -154,6 +155,8 @@ class EDD_Help_Scout {
 			$order['status']         = $result->post_status;
 			$order['amount']         = edd_get_payment_amount( $result->post_id );
 			$order['payment_method'] = edd_get_payment_gateway( $result->post_id );
+			$order['email']          = $user_info['email'];
+			$order['name']           = $user_info['first_name'] . ' ' . $user_info['last_name'];
 
 			if ( 'paypal' == $order['payment_method'] ) {
 				// Grab the PayPal transaction ID and link the transaction to PayPal
@@ -178,7 +181,6 @@ class EDD_Help_Scout {
 			$downloads = edd_get_payment_meta_downloads( $result->post_id );
 
 			if ( $downloads ) {
-				$license_keys = '';
 				foreach ( $downloads as $download ) {
 
 					$id = isset( $purchase['cart_details'] ) ? $download['id'] : $download;
@@ -188,22 +190,16 @@ class EDD_Help_Scout {
 					if ( get_post_meta( $id, '_edd_sl_enabled', true ) ) {
 
 						$license = $licensing->get_license_by_purchase( $order['id'], $id );
-						$license_keys .= '<strong>' . get_the_title( $id ) . "</strong><br/>"
+						$order['downloads'][] = '<strong>' . get_the_title( $id ) . "</strong><br/>"
 							. edd_get_price_option_name( $id, $download['options']['price_id'] ) . '<br/>'
-							. get_post_meta( $license->ID, '_edd_sl_key', true ) . '<br/><br/>';
+							. get_post_meta( $license->ID, '_edd_sl_key', true ) . '<br/>';
 
 					} else {
 
-						$license_keys .= '<strong>' . get_the_title( $id ) . "</strong><br/>";
+						$order['downloads'][] = '<strong>' . get_the_title( $id ) . "</strong><br/>";
 
 					}
-
-
 				}
-			}
-
-			if ( isset( $license_keys ) ) {
-				$order['downloads'][] = $license_keys;
 			}
 
 			$orders[] = $order;
